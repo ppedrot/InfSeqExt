@@ -29,6 +29,8 @@ case (classic (eventually P s)).
   apply weak_until_always_not_always in wu; trivial.
 Qed.
 
+Set Lax CoInductive Match.
+
 Lemma not_until_weak_until :
   forall (J P : infseq T -> Prop) (s : infseq T),
     ~ until J P s -> weak_until (J /\_ ~_ P) (~_ J /\_ ~_ P) s.
@@ -111,6 +113,8 @@ apply Always.
   assumption.
 Qed.
 
+Unset Lax CoInductive Match.
+
 Lemma not_always_eventually_not : 
   forall (P : infseq T -> Prop) (s : infseq T),
   ~ always P s -> eventually (~_ P) s.
@@ -122,6 +126,8 @@ apply not_eventually_not_always in evP.
 contradict alP.
 assumption.
 Qed.
+
+Set Lax CoInductive Match.
 
 Lemma not_until_release : 
   forall (J P : infseq T -> Prop) (s : infseq T),
@@ -185,6 +191,8 @@ case (classic (P s)).
     apply R0; unfold not_tl; assumption.
 Qed.
 
+Unset Lax CoInductive Match.
+
 Lemma not_inf_often_continuously_not : 
   forall (P : infseq T -> Prop) (s : infseq T),
   ~ inf_often P s -> continuously (~_ P) s.
@@ -198,6 +206,8 @@ induction ioP.
 - apply E_next.
   assumption.
 Qed.
+
+Set Lax CoInductive Match.
 
 Lemma not_continously_inf_often_not :
   forall (P : infseq T -> Prop) (s : infseq T),
@@ -219,6 +229,8 @@ apply Always.
   apply E_next.
   assumption.
 Qed.
+
+Unset Lax CoInductive Match.
 
 Lemma not_tl_and_tl_or_tl :
   forall (P Q : infseq T -> Prop) (s : infseq T),

@@ -169,6 +169,8 @@ Proof using.
 intros f P (x, (y, s)) nP; assumption. 
 Qed.
 
+Set Lax CoInductive Match.
+
 Lemma always_map :
    forall (f: A->B) (P: infseq A->Prop) (Q: infseq B->Prop),
    (forall s, P s -> Q (map f s)) ->
@@ -196,6 +198,8 @@ rewrite map_Cons in a. case (always_Cons a); intros a1 a2. constructor.
   * assumption.
 Qed.
 
+Unset Lax CoInductive Match.
+
 Lemma always_map_conv :
    forall (f: A->B) (P: infseq A->Prop) (Q: infseq B->Prop),
    (forall s, Q (map f s) -> P s) ->
@@ -204,6 +208,8 @@ Proof using.
 intros f P Q QP s.
 apply (always_map_conv_ext f P Q True_tl); auto.
 Qed.
+
+Set Lax CoInductive Match.
 
 Lemma weak_until_map :
    forall (f: A->B) (J P: infseq A->Prop) (K Q: infseq B->Prop),
@@ -234,6 +240,8 @@ rewrite map_Cons in un; case (weak_until_Cons un); clear un; rewrite <- map_Cons
 - intros (Kxs, un). constructor 2; simpl; auto.
 Qed.
 
+Unset Lax CoInductive Match.
+
 Lemma until_map :
    forall (f: A->B) (J P: infseq A->Prop) (K Q: infseq B->Prop),
    (forall s, J s -> K (map f s)) ->
@@ -251,6 +259,8 @@ induction un.
     assumption.
   * assumption.
 Qed.
+
+Set Lax CoInductive Match.
 
 Lemma release_map :
    forall (f: A->B) (J P: infseq A->Prop) (K Q: infseq B->Prop),
@@ -300,9 +310,13 @@ intros f P Q PQ s e. induction e as [s ok | x s e induc_hyp].
 - rewrite map_Cons. constructor 2. exact induc_hyp.
 Qed.
 
+Unset Lax CoInductive Match.
+
 (* The converse seems to require much more work *)
 
 Definition fstAB := fst (A:=A) (B:=B).
+
+Set Lax CoInductive Match.
 
 Lemma exteq_fst_zip:
   forall sA sB, exteq (map fstAB (zip sA sB)) sA.
@@ -379,6 +393,8 @@ assert (efst: J (map fstAB (zip s (map f s))) -> eventually P (map fstAB (zip s 
     + exact extP.
     + apply exteq_fst_zip.
 Qed.
+
+Unset Lax CoInductive Match.
 
 Lemma eventually_map_conv :
    forall (f: A->B) (P: infseq A->Prop) (Q: infseq B->Prop),

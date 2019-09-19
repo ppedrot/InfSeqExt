@@ -21,12 +21,7 @@ Definition hd (s:infseq) : T := match s with Cons x _ => x end.
 
 Definition tl (s:infseq) : infseq := match s with Cons _ s => s end.
 
-Lemma recons : forall s, Cons (hd s) (tl s) = s.
-Proof using.
-intros s. 
-(* Trick : simpl doesn't progress, you have to eat s first *)
-case s.  simpl. reflexivity.
-Qed.
+Axiom recons : forall s, Cons (hd s) (tl s) = s.
 
 End sec_infseq.
 
@@ -126,6 +121,8 @@ Section sec_modal_op_lemmas.
 
 Variable T : Type.
 
+Set Lax CoInductive Match.
+
 (* now facts *)
 Lemma now_hd :
   forall (P : T -> Prop) ex,
@@ -148,6 +145,8 @@ apply c; apply invP in Pxs.
 assumption.
 Qed.
 
+Unset Lax CoInductive Match.
+
 Lemma always_Cons :
   forall (x: T) (s: infseq T) P,
   always P (Cons x s) -> P (Cons x s) /\ always P s.
@@ -162,6 +161,8 @@ Proof using.
 intros x s P al. case (always_Cons x s P al); trivial.
 Qed.
 
+Set Lax CoInductive Match.
+
 Lemma always_now' :
   forall (P : infseq T -> Prop) ex,
     always P ex ->
@@ -171,11 +172,15 @@ Proof using.
   apply always_now.
 Qed.
 
+Unset Lax CoInductive Match.
+
 Lemma always_invar :
   forall (x: T) (s: infseq T) P, always P (Cons x s) -> always P s.
 Proof using.
 intros x s P al. case (always_Cons x s P al); trivial.
 Qed.
+
+Set Lax CoInductive Match.
 
 Lemma always_tl :
   forall (s: infseq T) P, always P s -> always P (tl s).
@@ -203,6 +208,8 @@ apply Always.
 - apply c.
 Qed.
 
+Unset Lax CoInductive Match.
+
 Lemma always_and_tl :
   forall (P Q : infseq T -> Prop),
     forall s, always P s -> always Q s -> always (P /\_ Q) s.
@@ -216,6 +223,8 @@ apply Always.
 - split; assumption.
 - apply c; assumption.
 Qed.
+
+Set Lax CoInductive Match.
 
 Lemma always_always :
   forall (P : infseq T -> Prop) s,
@@ -240,6 +249,8 @@ intros s a; case a; clear a s. intros (x, s); simpl. constructor.
 - apply alwn; assumption.
 Qed.
 
+Unset Lax CoInductive Match.
+
 Lemma always1_always :
    forall P (s: infseq T), always1 P s -> always (now P) s.
 Proof using.
@@ -248,6 +259,8 @@ cofix alwn. destruct 1. constructor; simpl.
 - assumption.
 - apply alwn; assumption.
 Qed.
+
+Set Lax CoInductive Match.
 
 Lemma always_weak_until :
   forall (J P : infseq T -> Prop) (s : infseq T), always J s -> weak_until J P s.
@@ -278,6 +291,8 @@ apply R_tl.
   assumption.
 Qed.
 
+Unset Lax CoInductive Match.
+
 Lemma always_inf_often :
    forall (P: infseq T -> Prop) (s : infseq T), always P s -> inf_often P s.
 Proof using.
@@ -305,6 +320,8 @@ change (P (Cons x s) \/ (J (Cons x s) /\ weak_until J P (tl (Cons x s)))).
 destruct un; intuition.
 Qed.
 
+Set Lax CoInductive Match.
+
 Lemma weak_until_always :
   forall (J J' P : infseq T -> Prop) s,
     weak_until J P s ->
@@ -321,6 +338,8 @@ inversion Hweak.
   + now unfold and_tl.
   + simpl. now eauto.
 Qed.
+
+Unset Lax CoInductive Match.
 
 Lemma until_weak_until :
   forall (J P : infseq T -> Prop) (s : infseq T),
@@ -360,6 +379,8 @@ apply E_next.
 assumption.
 Qed.
 
+Set Lax CoInductive Match.
+
 Lemma eventually_next : 
   forall (s: infseq T) P, eventually (next P) s -> eventually P s. 
 Proof using.
@@ -367,6 +388,8 @@ intros e P ev. induction ev as [(x, s) Ps | x s ev induc_hyp].
 - constructor 2; constructor 1; exact Ps. 
 - constructor 2. apply induc_hyp.
 Qed.
+
+Unset Lax CoInductive Match.
 
 Lemma eventually_always_cumul :
   forall (s: infseq T) P Q,
@@ -388,6 +411,8 @@ intros s P J ev. induction ev as [s Ps | x s evPs induc_hyp].
   * intros (_, uns). constructor 2. apply induc_hyp. exact uns.
 Qed.
 
+Set Lax CoInductive Match.
+
 Lemma weak_until_eventually :
   forall (P Q J: infseq T -> Prop),
   (forall s, J s -> P s -> Q s) ->
@@ -407,6 +432,8 @@ induction ev as [s Ps | x s ev induc_hyp].
     + intros s2 Js2 _ e J_weak_until_Q2. rewrite e in induc_hyp; clear e.
       apply induc_hyp; assumption.
 Qed.
+
+Unset Lax CoInductive Match.
 
 Lemma eventually_or_tl_intror :
   forall (P Q : infseq T -> Prop) s,
@@ -501,6 +528,8 @@ induction cnyP as [s alP|].
   apply continuously_invar in cnyQ; assumption.
 Qed.
 
+Set Lax CoInductive Match.
+
 Lemma continuously_inf_often : 
   forall (P : infseq T -> Prop) (s : infseq T),
     continuously P s -> inf_often P s.
@@ -514,6 +543,8 @@ induction cnyP.
   * apply E_next. destruct s as [s x']. apply always_now in IHcnyP. assumption.
   * apply IHcnyP.
 Qed.
+
+Unset Lax CoInductive Match.
 
 (* monotony *)
 
@@ -538,6 +569,8 @@ Proof using.
 intros P Q PQ (x, (y, s)) nP; simpl. apply PQ. assumption.
 Qed.
 
+Set Lax CoInductive Match.
+
 Lemma always_monotonic :
   forall (P Q: infseq T -> Prop),
   (forall s, P s -> Q s) -> forall s, always P s -> always Q s.
@@ -559,6 +592,8 @@ generalize (weak_until_Cons x s J P un); simpl. intros [Pxs | (Jxs, uns)].
 - constructor 2; simpl; auto.
 Qed.
 
+Unset Lax CoInductive Match.
+
 Lemma until_monotonic :
   forall (P Q J K: infseq T -> Prop),
   (forall s, P s -> Q s) -> (forall s, J s -> K s) ->
@@ -571,6 +606,8 @@ induction unJP.
   * apply JK; assumption.
   * assumption.
 Qed.
+
+Set Lax CoInductive Match.
 
 Lemma release_monotonic :
   forall (P Q J K: infseq T -> Prop),
@@ -590,6 +627,8 @@ case rlCJP; intros rlJP.
   * simpl.
     apply cf. assumption.
 Qed.
+
+Unset Lax CoInductive Match.
 
 Lemma eventually_monotonic :
   forall (P Q J: infseq T -> Prop), 
@@ -623,6 +662,8 @@ apply eventually_monotonic_simple.
 assumption.
 Qed.
 
+Set Lax CoInductive Match.
+
 Lemma cumul_eventually_always :
   forall (P Q : infseq T -> Prop) s,
     always P s ->
@@ -637,6 +678,8 @@ Proof using.
     firstorder using always_Cons.
   - eauto using E_next, always_invar.
 Qed.
+
+Unset Lax CoInductive Match.
 
 Lemma cumul_inf_often_always :
   forall (P Q : infseq T -> Prop) s,
@@ -684,6 +727,8 @@ assumption.
 Qed.
 
 (* not_tl inside operators *)
+
+Set Lax CoInductive Match.
 
 Lemma not_eventually_always_not :
   forall (P : infseq T -> Prop) (s : infseq T),
@@ -763,6 +808,8 @@ case unJP.
   assumption.
 Qed.
 
+Unset Lax CoInductive Match.
+
 Lemma weak_until_latch_eventually :
   forall (P Q : infseq T -> Prop) ex,
     weak_until (P /\_ ~_ Q) (P /\_ Q) ex ->
@@ -773,6 +820,8 @@ Proof using.
   induction 1;
     inversion H_w; firstorder using E0, E_next.
 Qed.
+
+Set Lax CoInductive Match.
 
 Lemma always_not_eventually_not :
   forall (P : infseq T -> Prop) (s : infseq T),
@@ -922,6 +971,8 @@ induction un as [s JPs | x s JPs IHun IH]; unfold not_tl, and_tl in JPs; destruc
     contradict IH.
     assumption.
 Qed.
+
+Unset Lax CoInductive Match.
 
 (* connector facts *)
 

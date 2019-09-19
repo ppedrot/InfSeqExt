@@ -26,6 +26,8 @@ CoInductive subseqs : infseq (infseq T) -> infseq T -> Prop :=
   | Subseqs : forall si s,
              suff (hd si) s -> subseqs (tl si) (tl (hd si)) -> subseqs si s. 
 
+Set Lax CoInductive Match.
+
 Lemma subseqs_subseqs' : forall si s, subseqs si s -> subseqs' si s.
 Proof using.
 cofix subsub. 
@@ -34,6 +36,8 @@ intros (s1, si) s0. simpl. intros su sb. constructor.
 - assumption.
 - apply subsub. assumption.
 Qed.
+
+Unset Lax CoInductive Match.
 
 Lemma subseqs'_subseqs : forall si s, subseqs' si s -> subseqs si s.
 cofix subsub.
@@ -54,6 +58,8 @@ induction sf as [ | x s0 _ Hrec]; intro a.
 - constructor 1. case a; simpl. intros; assumption.
 - constructor 2. apply Hrec. apply a.
 Qed.
+
+Set Lax CoInductive Match.
 
 Lemma subseqs_tl : forall si s, subseqs si (tl s) -> subseqs si s. 
 Proof using.
@@ -79,6 +85,8 @@ constructor.
     apply subseqs_tl. assumption (* induction hyp *). 
   * change (always1 P (tl (Cons s0 si))). case a; simpl; trivial. 
 Qed.
+
+Unset Lax CoInductive Match.
 
 (* Conversely : TODO *)
 

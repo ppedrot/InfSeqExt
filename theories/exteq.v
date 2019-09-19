@@ -20,15 +20,21 @@ change (hd (Cons x1 s1) = hd (Cons x2 s2) /\
 case e; clear e x1 s1 x2 s2. simpl. intros; split; trivial. 
 Qed.
 
+Set Lax CoInductive Match.
+
 Lemma exteq_refl : forall s, exteq s s. 
 Proof using.
 cofix cf. intros (x, s). constructor. apply cf. 
 Qed.
 
+Unset Lax CoInductive Match.
+
 Lemma exteq_sym : forall s1 s2, exteq s1 s2 -> exteq s2 s1.
 Proof using.
 cofix cf. destruct 1. constructor. apply cf. assumption. 
 Qed.
+
+Set Lax CoInductive Match.
 
 Lemma exteq_trans :
    forall s1 s2 s3, exteq s1 s2 -> exteq s2 s3 -> exteq s1 s3.
@@ -39,6 +45,8 @@ case (exteq_inversion _ _ _ _ e12); clear e12; intros e12 ex12.
 case (exteq_inversion _ _ _ _ e23); clear e23; intros e23 ex23. 
 rewrite e12; rewrite e23. constructor. apply cf with s2; assumption. 
 Qed.
+
+Unset Lax CoInductive Match.
 
 End sec_exteq.
 
@@ -134,6 +142,8 @@ Proof using.
 intros P s1 s2 e. do 2 destruct e; simpl. trivial.
 Qed.
 
+Set Lax CoInductive Match.
+
 Lemma extensional_always :
   forall (P: infseq T -> Prop),
   extensional P -> extensional (always P).
@@ -194,6 +204,8 @@ induction ev1 as [s1 ev1 | x1 s1 ev1 induc_hyp].
 - intros (x2, s2) e. constructor 2. apply induc_hyp.
   case (exteq_inversion e). trivial.
 Qed.
+
+Unset Lax CoInductive Match.
 
 Lemma extensional_inf_often :
 forall (P: infseq T -> Prop),
